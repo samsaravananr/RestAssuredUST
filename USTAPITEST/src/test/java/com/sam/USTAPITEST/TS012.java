@@ -7,6 +7,11 @@ import junit.framework.Assert;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.CoreMatchers.containsString;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 
 public class TS012 {
 	
@@ -15,7 +20,7 @@ public class TS012 {
 	public static String vID;
 	public static String vMSG;
 
-	public static void main(String[] args) throws InterruptedException 
+	public static void main(String[] args) throws InterruptedException, IOException 
 	{
 
 		RestAssured.baseURI="http://localhost:8080/";
@@ -32,13 +37,13 @@ public class TS012 {
 	}
 	
 	
-	public static void CREATE_CRUD()
+	public static void CREATE_CRUD() throws IOException
 	{
 		System.out.println("--------------------------------------");
 			
-		response=given().header("Content-Type","application/json").header("Connection","keep-alive").body(AddEMployeePayLoad())
-		.when().post("addEmployee")
-		.then().assertThat().statusCode(201).header("unique", containsString("Jude")).extract().response().asString();
+		response=given().header("Content-Type","application/json")
+		.body(new String (Files.readAllBytes(Paths.get("C:\\Users\\SARAVANAN R\\git\\RestAssuredUST\\USTAPITEST\\EAdd.json"))))
+		.when().post("addEmployee").then().extract().response().asString();
 		
 		
 		System.out.println(response);
